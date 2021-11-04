@@ -9,22 +9,28 @@ public class HairGrower : MonoBehaviour
 {
     [SerializeField] private List<GameObject> _growingPlaces;
     [SerializeField] private GameObject _bodyHairPrefab;
+    [SerializeField] private DuctTapeHairHolder _ductTapeHairHolder;
 
+    private List<DuctTapeHair> _hairs;
     private Player _player;
     private BodyHairCounter _bodyHairCounter;
+    private int _hairCount;
+    private int _maxHairQuantity;
     private int _difference;
-    private int _lasstBodyHairQuantity;
 
     public int GrowingPlacesCount => _growingPlaces.Count;
 
     private void Awake()
     {
+        _hairs = _ductTapeHairHolder.GetHairsList();
         _player = GetComponent<Player>();
         _bodyHairCounter = GetComponent<BodyHairCounter>();
     }
 
     private void Start()
     {
+        _hairCount = _bodyHairCounter.HairCount;
+        _maxHairQuantity = _bodyHairCounter.MaxHairQuantity;
         _difference = _bodyHairCounter.MaxHairQuantity - _bodyHairCounter.HairCount;
 
         foreach (var place in _growingPlaces)
@@ -34,26 +40,22 @@ public class HairGrower : MonoBehaviour
 
         for (int i = 0; i < _difference; i++)
         {
-            TryRemoveHair();
+            RemoveHair();
         }
-
-        _bodyHairCounter.HairCountChanged += OnHairCountChanged;
-        EqualizeQuantity();
-        Debug.Log(_lasstBodyHairQuantity);
     }
 
-    public void TryAddHair()
+    private void AddHair()
     {
-        if (_bodyHairCounter.HairCount != _bodyHairCounter.MaxHairQuantity)
+        if (_bodyHairCounter.HairCount < _maxHairQuantity)
         {
             var inactiveHairBlock = _growingPlaces.FirstOrDefault(hairBlock => hairBlock.activeSelf == false);
             inactiveHairBlock.SetActive(true);
         }
     }
 
-    public void TryRemoveHair()
+    private void RemoveHair()
     {
-        if (_bodyHairCounter.HairCount >= 0)
+        if (_hairCount > 0)
         {
             var activeHairBlock = _growingPlaces.FirstOrDefault(hairBlock => hairBlock.activeSelf == true);
             activeHairBlock.SetActive(false);
@@ -64,46 +66,49 @@ public class HairGrower : MonoBehaviour
     {
         _player.NegativeItemCollected += OnNegativeItemCollected;
         _player.PositiveItemCollected += OnPositiveItemCollected;
+        _bodyHairCounter.HairCountChanged += OnHairCountChanged;
+
+        foreach (var hair in _hairs)
+        {
+            hair.HairStucked += OnHairStucked;
+            hair.HairFelled += OnHairFelled;
+        }
     }
 
     private void OnDisable()
     {
         _player.NegativeItemCollected -= OnNegativeItemCollected;
         _player.PositiveItemCollected -= OnPositiveItemCollected;
-        _bodyHairCounter.HairCountChanged -= OnHairCountChanged;
+
+        foreach (var hair in _hairs)
+        {
+            hair.HairStucked -= OnHairStucked;
+            hair.HairFelled -= OnHairFelled;
+        }
     }
 
     private void OnNegativeItemCollected()
     {
-        //TryAddHair();
+        AddHair();
     }
 
     private void OnPositiveItemCollected()
     {
-        //TryRemoveHair();
+        RemoveHair();
+    }
+
+    private void OnHairStucked()
+    {
+        AddHair();
+    }
+
+    private void OnHairFelled()
+    {
+        RemoveHair();
     }
 
     private void OnHairCountChanged()
     {
-        //Debug.Log($"_lasstBodyHairQuantity - {_bodyHairCounter.HairCount}");
-
-        if (_bodyHairCounter.HairCount < _lasstBodyHairQuantity)
-        {
-            TryRemoveHair();
-        }
-
-        if (_bodyHairCounter.HairCount > _lasstBodyHairQuantity)
-        {
-            TryAddHair();
-        }
-
-        EqualizeQuantity();
-        //Debug.Log($"_lasstBodyHairQuantity - { _lasstBodyHairQuantity}");
-
-    }
-
-    private void EqualizeQuantity()
-    {
-        _lasstBodyHairQuantity = _bodyHairCounter.HairCount;
+        _hairCount = _bodyHairCounter.HairCount;
     }
 }

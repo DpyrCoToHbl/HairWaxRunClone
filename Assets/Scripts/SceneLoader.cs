@@ -10,26 +10,38 @@ public class SceneLoader : MonoBehaviour
     [SerializeField] private Button _nextButton;
     [SerializeField] private Button _continueButton;
 
+    private int _currentSceneIndex;
+    private int _nextSceneIndex;
+
     public event UnityAction NextButtonClicked;
+
+    private void Start()
+    {
+        _currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+    }
 
     public void OnNextButtonClick()
     {
         NextButtonClicked?.Invoke();
-        SceneManager.LoadScene(GetRandomLevel());
+
+        do
+        {
+            _nextSceneIndex = GetRandomLevel();
+        }
+        while (_nextSceneIndex == _currentSceneIndex);
+
+        SceneManager.LoadScene(_nextSceneIndex);
     }
 
     public void OnContinueButtonClick()
     {
-        var currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
-
-        SceneManager.LoadScene(currentSceneIndex);
+        SceneManager.LoadScene(_currentSceneIndex);
     }
 
     private int GetRandomLevel()
     {
         List<int> scenes = new List<int> { SceneIndexHolder.FirstLevel, SceneIndexHolder.SecondLevel, SceneIndexHolder.ThirdLevel };
-        int sceneIndex = scenes[Random.Range(0, scenes.Count -1)];
-
+        int sceneIndex = scenes[Random.Range(0, scenes.Count - 1)];
         return sceneIndex;
     }
 }

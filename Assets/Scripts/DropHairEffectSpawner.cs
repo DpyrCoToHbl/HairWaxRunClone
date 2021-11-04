@@ -23,9 +23,7 @@ public class DropHairEffectSpawner : MonoBehaviour
         if (_player.TryGetComponent(out BodyHairCounter bodyHairCounter))
         {
             if (bodyHairCounter.HairCount > 0)
-            {
                 Instantiate(_particlePrefab, transform.position, transform.rotation);
-            }
         }
     }
 }

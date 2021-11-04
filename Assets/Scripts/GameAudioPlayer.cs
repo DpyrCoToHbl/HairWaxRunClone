@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GameAudioPlayer : MonoBehaviour
@@ -16,16 +17,14 @@ public class GameAudioPlayer : MonoBehaviour
     {
         _player.PositiveItemCollected += OnPositiveItemCollected;
         _player.NegativeItemCollected += OnNegativeItemCollected;
-        _player.SteppedOnGreenDuctTape += OnGreenMatTriggerEnter;
-        _player.SteppedOnRedDuctTape += OnRedMatTriggerEnter;
+        _player.SteppedOnDuctTape += OnSteppedOnDuctTape;
     }
 
     private void OnDisable()
     {
         _player.PositiveItemCollected -= OnPositiveItemCollected;
         _player.NegativeItemCollected -= OnNegativeItemCollected;
-        _player.SteppedOnGreenDuctTape -= OnGreenMatTriggerEnter;
-        _player.SteppedOnRedDuctTape -= OnRedMatTriggerEnter;
+        _player.SteppedOnDuctTape -= OnSteppedOnDuctTape;
     }
 
     private void OnPositiveItemCollected()
@@ -38,14 +37,12 @@ public class GameAudioPlayer : MonoBehaviour
         _audioSource.PlayOneShot(_negativeItemSound);
     }
 
-    private void OnGreenMatTriggerEnter()
+    private void OnSteppedOnDuctTape(GameObject ductTape, string name)
     {
-        StartCoroutine(PlayWithDelay(_rollOnGreenMatSound));
-    }
-
-    private void OnRedMatTriggerEnter()
-    {
-        StartCoroutine(PlayWithDelay(_rollOnRedMatSound));
+        if (name == "Green")
+            StartCoroutine(PlayWithDelay(_rollOnGreenMatSound));
+        else
+            StartCoroutine(PlayWithDelay(_rollOnRedMatSound));
     }
 
     private IEnumerator PlayWithDelay(AudioClip audioClip)

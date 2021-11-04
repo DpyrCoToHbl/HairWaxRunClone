@@ -25,6 +25,7 @@ public class PlayerMover : MonoBehaviour
     private bool _isMoving;
     private bool _isGrounded;
     private bool _isRotationLocked;
+    private bool _isMovementAllowed;
 
     public bool IsCheckpointReached { get; private set; }
 
@@ -40,6 +41,7 @@ public class PlayerMover : MonoBehaviour
 
     private void Start()
     {
+        _isMovementAllowed = true;
         _speed = _defaultSpeed;
         _checkpoints = new Transform[_path.childCount];
 
@@ -88,7 +90,7 @@ public class PlayerMover : MonoBehaviour
 
     private void Move()
     {
-        if (!_isMoving && Input.GetKey(KeyCode.Mouse0))
+        if (!_isMoving && Input.GetKey(KeyCode.Mouse0) && _isMovementAllowed)
         {
             _isMoving = true;
             Moving?.Invoke();
@@ -151,8 +153,7 @@ public class PlayerMover : MonoBehaviour
     {
         _player.FinishLineReached += OnFinishLineReached;
         _player.Lose += OnLose;
-        _player.SteppedOnGreenDuctTape += OnMatReached;
-        _player.SteppedOnRedDuctTape += OnMatReached;
+        _player.SteppedOnDuctTape += OnMatReached;
         _player.GotOffDuctTape += OnGotOffDuctTape;
     }
 
@@ -160,20 +161,21 @@ public class PlayerMover : MonoBehaviour
     {
         _player.FinishLineReached -= OnFinishLineReached;
         _player.Lose -= OnLose;
-        _player.SteppedOnGreenDuctTape -= OnMatReached;
-        _player.SteppedOnRedDuctTape -= OnMatReached;
+        _player.SteppedOnDuctTape -= OnMatReached;
         _player.GotOffDuctTape -= OnGotOffDuctTape;
     }
 
     private void OnFinishLineReached()
     {
         DisableMovement();
+        ProhibitMovement();
     }
 
-    private void OnMatReached()
+    private void OnMatReached(GameObject ductTape, string name)
     {
         _isRotationLocked = true;
         StartCoroutine(ChangeSpeed());
+        transform.rotation = Quaternion.LookRotation(ductTape.gameObject.transform.forward);
     }
 
     private void OnGotOffDuctTape()
@@ -185,6 +187,7 @@ public class PlayerMover : MonoBehaviour
     private void OnLose()
     {
         DisableMovement();
+        ProhibitMovement();
     }
 
     private IEnumerator SwitchReachedTrigget()
@@ -200,5 +203,10 @@ public class PlayerMover : MonoBehaviour
         yield return new WaitForSeconds(1.8f);
         _speed = _defaultSpeed;
         _isMoving = true;
+    }
+
+    private void ProhibitMovement()
+    {
+        _isMovementAllowed = false;
     }
 }

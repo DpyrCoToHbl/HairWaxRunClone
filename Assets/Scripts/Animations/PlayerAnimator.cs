@@ -8,7 +8,7 @@ public class PlayerAnimator : MonoBehaviour
 {
     [SerializeField] private PlayerMover _playerMover;
     [SerializeField] private HairinessStatesSwitcher _hairinessStatesSwitcher;
-    
+
     private Player _player;
     private Animator _animator;
     private string _currentAnimationName;
@@ -26,8 +26,7 @@ public class PlayerAnimator : MonoBehaviour
         _playerMover.Floating += OnFloating;
         _player.FinishLineReached += OnFinishLineReached;
         _player.Lose += OnLoose;
-        _player.SteppedOnGreenDuctTape += OnSteppedOnGreenDuctTape;
-        _player.SteppedOnRedDuctTape += OnSteppedOnRedDuctTape;
+        _player.SteppedOnDuctTape += OnSteppedOnDuctTape;
     }
 
     private void OnDisable()
@@ -38,8 +37,7 @@ public class PlayerAnimator : MonoBehaviour
         _player.FinishLineReached -= OnFinishLineReached;
         _hairinessStatesSwitcher.StateChanged -= OnStateChanged;
         _player.Lose -= OnLoose;
-        _player.SteppedOnGreenDuctTape -= OnSteppedOnGreenDuctTape;
-        _player.SteppedOnRedDuctTape -= OnSteppedOnRedDuctTape;
+        _player.SteppedOnDuctTape -= OnSteppedOnDuctTape;
     }
 
     private void OnMoving()
@@ -69,12 +67,7 @@ public class PlayerAnimator : MonoBehaviour
         _animator.Play(AnimationStatesHolder.DeathAnimation);
     }
 
-    private void OnSteppedOnGreenDuctTape()
-    {
-        _animator.Play(AnimationStatesHolder.LieDownAnimation);
-    }
-
-    private void OnSteppedOnRedDuctTape()
+    private void OnSteppedOnDuctTape(GameObject ductTape, string name)
     {
         _animator.Play(AnimationStatesHolder.LieDownAnimation);
     }
@@ -99,11 +92,12 @@ public class PlayerAnimator : MonoBehaviour
         if (animation != _currentAnimationName)
         {
             _animator.SetBool(_currentAnimationName, false);
-            _animator.SetTrigger(AnimationStatesHolder.SpinAnimation);
+
+            if(!_player.IsOnDuctTape)
+            _animator.Play(AnimationStatesHolder.SpinAnimation);
+
             _currentAnimationName = animation;
             _animator.SetBool(animation, true);
         }
     }
-
-    
 }

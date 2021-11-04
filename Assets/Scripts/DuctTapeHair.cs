@@ -1,12 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Events;
 
 [RequireComponent(typeof(MeshRenderer))]
 public class DuctTapeHair : MonoBehaviour
 {
     private MeshRenderer _meshRenderer;
+
+    public UnityAction HairStucked;
+    public UnityAction HairFelled;
 
     private void Awake()
     {
@@ -15,34 +16,26 @@ public class DuctTapeHair : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.TryGetComponent(out BodyHairCounter bodyHairCounter))
-        {
-            ToggleVisibility(bodyHairCounter);
-        }
+        if (other.gameObject.TryGetComponent(out Player player))
+            ToggleVisibility(player.gameObject);
     }
 
-    private void ToggleVisibility(BodyHairCounter bodyHairCounter)
+    private void ToggleVisibility(GameObject gameObject)
     {
         if (_meshRenderer.enabled == true)
         {
             _meshRenderer.enabled = false;
-            bodyHairCounter.AddHair();
-
-            if(TryGetComponent(out HairGrower hairGrower))
-            {
-                hairGrower.TryAddHair();
-                Debug.Log("Added");
-            }
+            HairStucked?.Invoke();
         }
         else
         {
-            _meshRenderer.enabled = true;
-            bodyHairCounter.RemoveHair();
-
-            if (TryGetComponent(out HairGrower hairGrower))
+            if (gameObject.TryGetComponent(out BodyHairCounter bodyHairCounter))
             {
-                hairGrower.TryRemoveHair();
-                Debug.Log("Deleted");
+                if (bodyHairCounter.HairCount > 0)
+                {
+                    _meshRenderer.enabled = true;
+                    HairFelled?.Invoke();
+                }
             }
         }
     }

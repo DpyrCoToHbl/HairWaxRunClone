@@ -4,49 +4,73 @@ using UnityEngine.Events;
 
 public class Player : MonoBehaviour
 {
-    public bool IsFinished { get; private set; }
+    [SerializeField] private BodyHairCounter _bodyHairCounter;
 
+    private const string RedDuctTapeName = "Red";
+    private const string GreenDuctTapeName = "Green";
+
+    public bool IsFinished { get; private set; }
+    public bool IsOnDuctTape { get; private set; }
+
+    public event UnityAction<GameObject, string> SteppedOnDuctTape;
     public event UnityAction FinishLineReached;
     public event UnityAction NegativeItemCollected;
     public event UnityAction PositiveItemCollected;
-    public event UnityAction SteppedOnRedDuctTape;
-    public event UnityAction SteppedOnGreenDuctTape;
     public event UnityAction GotOffDuctTape;
     public event UnityAction JumpPadReached;
     public event UnityAction Lose;
 
     private void OnTriggerEnter(Collider other)
     {
-
-        if (other.TryGetComponent(out NegativeObject negativeObject))
+        if (other.gameObject.TryGetComponent(out NegativeObject negativeObject))
             NegativeItemCollected?.Invoke();
 
-        if (other.TryGetComponent(out PositiveObject positiveObject))
+        if (other.gameObject.TryGetComponent(out PositiveObject positiveObject))
             PositiveItemCollected?.Invoke();
 
-        if (other.TryGetComponent(out RedDuctTape redDuctTape))
-            SteppedOnRedDuctTape?.Invoke();
+        if (other.gameObject.TryGetComponent(out DuctTape ductTape))
+        {
+            if (other.gameObject.name == RedDuctTapeName)
+            {
+                SteppedOnDuctTape?.Invoke(other.gameObject, RedDuctTapeName);
+                SwitchOnDuckTapeFlag();
+            }
 
-        if (other.TryGetComponent(out GreenDuctTape greenDuctTape))
-            SteppedOnGreenDuctTape?.Invoke();
+            if (other.gameObject.name == GreenDuctTapeName)
+            {
+                if (_bodyHairCounter.HairCount != 0)
+                {
+                    SteppedOnDuctTape?.Invoke(other.gameObject, GreenDuctTapeName);
+                    SwitchOnDuckTapeFlag();
+                }
+            }
+        }
 
-        if (other.TryGetComponent(out FinishLine finishLine))
+        if (other.gameObject.TryGetComponent(out FinishLine finishLine))
         {
             FinishLineReached?.Invoke();
             IsFinished = true;
         }
 
-        if (other.TryGetComponent(out JumpPad jumpPad))
+        if (other.gameObject.TryGetComponent(out JumpPad jumpPad))
             JumpPadReached?.Invoke();
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.TryGetComponent(out RedDuctTape redDuctTape))
+        if (other.gameObject.TryGetComponent(out DuctTape ductTape) && IsOnDuctTape)
+        {
             GotOffDuctTape?.Invoke();
+            SwitchOnDuckTapeFlag();
+        }
+    }
 
-        if (other.TryGetComponent(out GreenDuctTape greenDuctTape))
-            GotOffDuctTape?.Invoke();
+    private void SwitchOnDuckTapeFlag()
+    {
+        if (IsOnDuctTape)
+            IsOnDuctTape = false;
+        else
+            IsOnDuctTape = true;
     }
 
     public void Die()

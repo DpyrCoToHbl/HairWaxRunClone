@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -8,8 +7,10 @@ using UnityEngine.Events;
 public class BodyHairCounter : MonoBehaviour
 {
     [SerializeField] private int _hairCount;
-
+    [SerializeField] private DuctTapeHairHolder _ductTapeHairHolder;
+    
     private Player _player;
+    private List<DuctTapeHair> _hairs;
     private HairGrower _hairGrower;
     public int MaxHairQuantity;
 
@@ -19,11 +20,11 @@ public class BodyHairCounter : MonoBehaviour
 
     private void Awake()
     {
+        _hairs = _ductTapeHairHolder.GetHairsList();
         _player = GetComponent<Player>();
         _hairGrower = GetComponent<HairGrower>();
         MaxHairQuantity = _hairGrower.GrowingPlacesCount;
         _hairCount = 23;
-        HairCountChanged?.Invoke();
     }
 
     private void Start()
@@ -31,7 +32,7 @@ public class BodyHairCounter : MonoBehaviour
         HairCountChanged?.Invoke();
     }
 
-    public void AddHair()
+    private void Increase()
     {
         _hairCount++;
         HairCountChanged?.Invoke();
@@ -42,10 +43,9 @@ public class BodyHairCounter : MonoBehaviour
         }
     }
 
-    public void RemoveHair()
+    private void Decrease()
     {
-
-        if (_hairCount != 0)
+        if (_hairCount > 0)
             _hairCount--;
 
         HairCountChanged?.Invoke();
@@ -55,21 +55,43 @@ public class BodyHairCounter : MonoBehaviour
     {
         _player.PositiveItemCollected += OnPositiveItemCollected;
         _player.NegativeItemCollected += OnNegativeItemCollected;
+
+        foreach (var hair in _hairs)
+        {
+            hair.HairStucked += OnHairStucked;
+            hair.HairFelled += OnHairFelled;
+        }
     }
 
     private void OnDisable()
     {
         _player.PositiveItemCollected -= OnPositiveItemCollected;
         _player.NegativeItemCollected -= OnNegativeItemCollected;
+
+        foreach (var hair in _hairs)
+        {
+            hair.HairStucked -= OnHairStucked;
+            hair.HairFelled -= OnHairFelled;
+        }
     }
 
     private void OnPositiveItemCollected()
     {
-        RemoveHair();
+        Decrease();
     }
 
     private void OnNegativeItemCollected()
     {
-        AddHair();
+        Increase();
+    }
+
+    private void OnHairStucked()
+    {
+        Increase();
+    }
+
+    private void OnHairFelled()
+    {
+        Decrease();
     }
 }
