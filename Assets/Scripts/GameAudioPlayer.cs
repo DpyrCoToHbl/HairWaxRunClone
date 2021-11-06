@@ -5,7 +5,6 @@ public class GameAudioPlayer : MonoBehaviour
 {
     [SerializeField] private Player _player;
     [SerializeField] private AudioSource _audioSource;
-
     [SerializeField] private AudioClip _collectPositiveItemSound;
     [SerializeField] private AudioClip _collectNegativeItemSound;
     [SerializeField] private AudioClip _rollOnRedMatSound;

@@ -6190,6 +6190,16 @@ PrefabInstance:
       propertyPath: _player
       value: 
       objectReference: {fileID: 1587611514}
+    - target: {fileID: 817364979713913241, guid: 16e1f612fc8306349b36a419c4ac89e1,
+        type: 3}
+      propertyPath: _collectNegativeItemSound
+      value: 
+      objectReference: {fileID: 8300000, guid: bcaa860463a1c6b4ab0a57c6bd58b312, type: 3}
+    - target: {fileID: 817364979713913241, guid: 16e1f612fc8306349b36a419c4ac89e1,
+        type: 3}
+      propertyPath: _collectPositiveItemSound
+      value: 
+      objectReference: {fileID: 8300000, guid: e771bf84ecc86dd46b072a351dc9a5d7, type: 3}
     - target: {fileID: 817364979713913247, guid: 16e1f612fc8306349b36a419c4ac89e1,
         type: 3}
       propertyPath: m_RootOrder
