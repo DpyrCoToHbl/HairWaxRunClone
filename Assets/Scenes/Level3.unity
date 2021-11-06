@@ -682,6 +682,8 @@ Transform:
   - {fileID: 295300981}
   - {fileID: 1027838741}
   - {fileID: 1779568131}
+  - {fileID: 476315720}
+  - {fileID: 1483806709}
   m_Father: {fileID: 1082223103}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1564,6 +1566,81 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d05e7c86d7e7aae479a8eb7744160994, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1001 &476315719
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 85585644}
+    m_Modifications:
+    - target: {fileID: 851192594725349233, guid: 2de2176a52f423e48b3ade0eb2d58b64,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 851192594725349233, guid: 2de2176a52f423e48b3ade0eb2d58b64,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.71
+      objectReference: {fileID: 0}
+    - target: {fileID: 851192594725349233, guid: 2de2176a52f423e48b3ade0eb2d58b64,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.94
+      objectReference: {fileID: 0}
+    - target: {fileID: 851192594725349233, guid: 2de2176a52f423e48b3ade0eb2d58b64,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 57.31
+      objectReference: {fileID: 0}
+    - target: {fileID: 851192594725349233, guid: 2de2176a52f423e48b3ade0eb2d58b64,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 851192594725349233, guid: 2de2176a52f423e48b3ade0eb2d58b64,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 851192594725349233, guid: 2de2176a52f423e48b3ade0eb2d58b64,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 851192594725349233, guid: 2de2176a52f423e48b3ade0eb2d58b64,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 851192594725349233, guid: 2de2176a52f423e48b3ade0eb2d58b64,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 851192594725349233, guid: 2de2176a52f423e48b3ade0eb2d58b64,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 851192594725349233, guid: 2de2176a52f423e48b3ade0eb2d58b64,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4434729514783397218, guid: 2de2176a52f423e48b3ade0eb2d58b64,
+        type: 3}
+      propertyPath: m_Name
+      value: HairClump (2)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 2de2176a52f423e48b3ade0eb2d58b64, type: 3}
+--- !u!4 &476315720 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 851192594725349233, guid: 2de2176a52f423e48b3ade0eb2d58b64,
+    type: 3}
+  m_PrefabInstance: {fileID: 476315719}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &479481898
 GameObject:
   m_ObjectHideFlags: 0
@@ -5215,6 +5292,81 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5431050357610818398, guid: b48acaa5335212a4087cf99c8604f73a,
     type: 3}
   m_PrefabInstance: {fileID: 1011738492}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1483806708
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 85585644}
+    m_Modifications:
+    - target: {fileID: 851192594725349233, guid: 2de2176a52f423e48b3ade0eb2d58b64,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 851192594725349233, guid: 2de2176a52f423e48b3ade0eb2d58b64,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -4.24
+      objectReference: {fileID: 0}
+    - target: {fileID: 851192594725349233, guid: 2de2176a52f423e48b3ade0eb2d58b64,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.94
+      objectReference: {fileID: 0}
+    - target: {fileID: 851192594725349233, guid: 2de2176a52f423e48b3ade0eb2d58b64,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 57.31
+      objectReference: {fileID: 0}
+    - target: {fileID: 851192594725349233, guid: 2de2176a52f423e48b3ade0eb2d58b64,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 851192594725349233, guid: 2de2176a52f423e48b3ade0eb2d58b64,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 851192594725349233, guid: 2de2176a52f423e48b3ade0eb2d58b64,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 851192594725349233, guid: 2de2176a52f423e48b3ade0eb2d58b64,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 851192594725349233, guid: 2de2176a52f423e48b3ade0eb2d58b64,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 851192594725349233, guid: 2de2176a52f423e48b3ade0eb2d58b64,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 851192594725349233, guid: 2de2176a52f423e48b3ade0eb2d58b64,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4434729514783397218, guid: 2de2176a52f423e48b3ade0eb2d58b64,
+        type: 3}
+      propertyPath: m_Name
+      value: HairClump (3)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 2de2176a52f423e48b3ade0eb2d58b64, type: 3}
+--- !u!4 &1483806709 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 851192594725349233, guid: 2de2176a52f423e48b3ade0eb2d58b64,
+    type: 3}
+  m_PrefabInstance: {fileID: 1483806708}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1488984535
 PrefabInstance:
