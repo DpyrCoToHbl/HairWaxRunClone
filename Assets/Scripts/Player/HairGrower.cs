@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -11,8 +10,8 @@ public class HairGrower : MonoBehaviour
     [SerializeField] private GameObject _bodyHairPrefab;
     [SerializeField] private DuctTapeHairHolder _ductTapeHairHolder;
 
-    private List<DuctTapeHair> _hairs;
     private Player _player;
+    private List<DuctTapeHair> _hairs;
     private BodyHairCounter _bodyHairCounter;
     private int _hairCount;
     private int _maxHairQuantity;

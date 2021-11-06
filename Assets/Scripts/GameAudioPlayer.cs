@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GameAudioPlayer : MonoBehaviour
@@ -7,8 +6,8 @@ public class GameAudioPlayer : MonoBehaviour
     [SerializeField] private Player _player;
     [SerializeField] private AudioSource _audioSource;
 
-    [SerializeField] private AudioClip _positiveItemSound;
-    [SerializeField] private AudioClip _negativeItemSound;
+    [SerializeField] private AudioClip _collectPositiveItemSound;
+    [SerializeField] private AudioClip _collectNegativeItemSound;
     [SerializeField] private AudioClip _rollOnRedMatSound;
     [SerializeField] private AudioClip _rollOnGreenMatSound;
 
@@ -29,12 +28,12 @@ public class GameAudioPlayer : MonoBehaviour
 
     private void OnPositiveItemCollected()
     {
-        _audioSource.PlayOneShot(_positiveItemSound);
+        _audioSource.PlayOneShot(_collectPositiveItemSound);
     }
 
     private void OnNegativeItemCollected()
     {
-        _audioSource.PlayOneShot(_negativeItemSound);
+        _audioSource.PlayOneShot(_collectNegativeItemSound);
     }
 
     private void OnSteppedOnDuctTape(GameObject ductTape, string name)

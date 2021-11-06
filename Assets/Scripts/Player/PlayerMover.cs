@@ -1,8 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerMover : MonoBehaviour
@@ -17,11 +15,12 @@ public class PlayerMover : MonoBehaviour
     private Transform[] _checkpoints;
     private Rigidbody _rigidbody;
     private int _currentCheckpointIndex;
-    private int _defaultSpeed = 7;
-    private int _angle = 60;
-    private float _rotationSpeed = 5;
-    private float _strafeSpeed = 2;
-    private float _jumpForce = 18;
+
+    private const int DefaultSpeed = 7;
+    private const int Angle = 60;
+    private const float RotationSpeed = 5;
+    private const float StepSpeed = 2;
+    private const float JumpForce = 18;
     private bool _isMoving;
     private bool _isGrounded;
     private bool _isRotationLocked;
@@ -42,7 +41,7 @@ public class PlayerMover : MonoBehaviour
     private void Start()
     {
         _isMovementAllowed = true;
-        _speed = _defaultSpeed;
+        _speed = DefaultSpeed;
         _checkpoints = new Transform[_path.childCount];
 
         for (int i = 0; i < _path.childCount; i++)
@@ -62,13 +61,13 @@ public class PlayerMover : MonoBehaviour
     private void FixedUpdate()
     {
         Move();
-        Rotate();
+        TryTurn();
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.GetComponent<JumpPad>())
-            _rigidbody.AddForce(Vector3.up * _jumpForce, ForceMode.Impulse);
+            _rigidbody.AddForce(Vector3.up * JumpForce, ForceMode.Impulse);
 
         if (other.gameObject.GetComponent<Checkpoint>())
         {
@@ -104,26 +103,36 @@ public class PlayerMover : MonoBehaviour
             {
                 if (Input.GetAxis("Mouse X") < 0)
                 {
-                    transform.rotation *= Quaternion.AngleAxis(-_angle * Time.deltaTime, Vector3.up);
-                    transform.Translate(Vector3.left * _strafeSpeed * Time.deltaTime);
+                    Rotate(Angle * -1);
+                    MoveAside(Vector3.left);
                 }
 
                 if (Input.GetAxis("Mouse X") > 0)
                 {
-                    transform.rotation *= Quaternion.AngleAxis(_angle * Time.deltaTime, Vector3.up);
-                    transform.Translate(Vector3.right * _strafeSpeed * Time.deltaTime);
+                    Rotate(Angle);
+                    MoveAside(Vector3.right);
                 }
             }
         }
     }
 
-    private void Rotate()
+    private void MoveAside(Vector3 direction)
+    {
+        transform.Translate(direction * StepSpeed * Time.deltaTime);
+    }
+
+    private void Rotate(int angle)
+    {
+        transform.rotation *= Quaternion.AngleAxis(angle * Time.deltaTime, Vector3.up);
+    }
+
+    private void TryTurn()
     {
         if (IsCheckpointReached)
         {
             var direction = _target.transform.position - transform.position;
             Quaternion rotation = Quaternion.LookRotation(direction);
-            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, _rotationSpeed * Time.deltaTime);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, RotationSpeed * Time.deltaTime);
         }
 
         if (_player.IsFinished)
@@ -201,7 +210,7 @@ public class PlayerMover : MonoBehaviour
         _speed = 0;
         DisableMovement();
         yield return new WaitForSeconds(1.8f);
-        _speed = _defaultSpeed;
+        _speed = DefaultSpeed;
         _isMoving = true;
     }
 

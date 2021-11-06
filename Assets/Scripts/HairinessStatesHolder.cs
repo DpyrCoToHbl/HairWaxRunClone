@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public static class HairinessStatesHolder
+﻿public static class HairinessStatesHolder
 {
     public const string Hairy = "Hairy";
     public const string Thin = "Thin";

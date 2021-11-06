@@ -1,6 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class CameraFollow : MonoBehaviour
@@ -15,7 +13,7 @@ public class CameraFollow : MonoBehaviour
     private const float _speed = 7;
     private const float _viewCorrective = 5;
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         Move();
     }
@@ -75,17 +73,16 @@ public class CameraFollow : MonoBehaviour
         yield return new WaitForSeconds(delay);
 
         if (_targetCurrentEulerAngleY == Mathf.Clamp(_targetCurrentEulerAngleY, targetLeftRotationMinEulerAnglesY, targetLeftRotationMaxEulerAnglesY))
-        {
-            var tempOffset = -_offset.x;
-            _offset.x = -_offset.z;
-            _offset.z = tempOffset;
-        }
+            SwitchOffset(_offset.x*-1, _offset.z*-1);
 
         if (_targetCurrentEulerAngleY == Mathf.Clamp(_targetCurrentEulerAngleY, targetRightRotationMinEulerAnglesY, targetRightRotationMaxEulerAnglesY))
-        {
-            var tempOffset = _offset.x;
-            _offset.x = _offset.z;
-            _offset.z = tempOffset;
-        }
+            SwitchOffset(_offset.x, _offset.z);
+    }
+
+    private void SwitchOffset(float offsetX, float offsetZ)
+    {
+        var tempOffset = offsetX;
+        _offset.x = offsetZ;
+        _offset.z = tempOffset;
     }
 }

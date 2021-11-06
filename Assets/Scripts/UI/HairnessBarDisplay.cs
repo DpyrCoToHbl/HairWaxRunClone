@@ -57,24 +57,16 @@ public class HairnessBarDisplay : MonoBehaviour
         Color32 SmoothStateColor = new Color32(28, 153, 255, 255);
 
         if (_hairinessStatesSwitcher.CurrentState == HairinessStatesHolder.Hairy)
-        {
             GetParams(HairinessStatesHolder.Hairy, HairyStateColor);
-        }
 
         if (_hairinessStatesSwitcher.CurrentState == HairinessStatesHolder.Thin)
-        {
             GetParams(HairinessStatesHolder.Thin, ThinStateColor);
-        }
 
         if (_hairinessStatesSwitcher.CurrentState == HairinessStatesHolder.Hairless)
-        {
             GetParams(HairinessStatesHolder.Hairless, HairlessStateColor);
-        }
 
         if (_hairinessStatesSwitcher.CurrentState == HairinessStatesHolder.Smooth)
-        {
             GetParams(HairinessStatesHolder.Smooth, SmoothStateColor);
-        }
     }
 
     private void GetParams(string stateName, Color32 color)
