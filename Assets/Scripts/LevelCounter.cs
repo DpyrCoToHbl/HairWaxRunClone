@@ -1,44 +1,49 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
-
+using UnityEngine.Events;
 
 public class LevelCounter : MonoBehaviour
 {
     [SerializeField] private TMP_Text _currentLevelText;
     [SerializeField] private SceneLoader _sceneLoader;
+    [SerializeField] private SaveSystem _saveSystem;
 
     private int _currentLevelNumber = 1;
 
-    public int CurrentLevelNumber => _currentLevelNumber;
-
+    public event UnityAction<int> LevelNumberChanged;
     private void Start()
     {
-        SaveSystem.LoadLevel();
+        _saveSystem.Load();
         ShowLevelNumber();
     }
 
     private void OnEnable()
     {
         _sceneLoader.NextButtonClicked += OnNextButtonClicked;
+        _saveSystem.Loaded += OnLoaded;
     }
 
     private void OnDisable()
     {
-        _sceneLoader.NextButtonClicked -= OnNextButtonClicked;
+        _saveSystem.Loaded -= OnLoaded;
+        _sceneLoader.NextButtonClicked += OnNextButtonClicked;
     }
 
-    private void OnNextButtonClicked()
+    private void OnLoaded(int levelNumber, int sceneIndex)
     {
-        _currentLevelNumber++;
-        SaveSystem.SaveLevel(this);
+        _currentLevelNumber = levelNumber;
         ShowLevelNumber();
     }
 
     private void ShowLevelNumber()
     {
         _currentLevelText.text = $"Level {_currentLevelNumber}";
+    }
+
+    private void OnNextButtonClicked()
+    {
+        _currentLevelNumber++;
+        LevelNumberChanged?.Invoke(_currentLevelNumber);
     }
 
 }

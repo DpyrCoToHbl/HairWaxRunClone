@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -7,6 +6,7 @@ using UnityEngine.UI;
 
 public class SceneLoader : MonoBehaviour
 {
+    [SerializeField] private SaveSystem _saveSystem;
     [SerializeField] private Button _nextButton;
     [SerializeField] private Button _continueButton;
 
@@ -14,34 +14,59 @@ public class SceneLoader : MonoBehaviour
     private int _nextSceneIndex;
 
     public event UnityAction NextButtonClicked;
+    public event UnityAction<int> SceneChanged;
 
     private void Start()
     {
         _currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
     }
 
+    private void OnEnable()
+    {
+        _saveSystem.Loaded += OnLoaded;
+    }
+
+    private void OnDisable()
+    {
+        _saveSystem.Loaded += OnLoaded;
+    }
+
     public void OnNextButtonClick()
     {
+        _nextSceneIndex = GetRandomLevel();
+        SceneChanged?.Invoke(_nextSceneIndex);
         NextButtonClicked?.Invoke();
-
-        do
-        {
-            _nextSceneIndex = GetRandomLevel();
-        }
-        while (_nextSceneIndex == _currentSceneIndex);
-
-        SceneManager.LoadScene(_nextSceneIndex);
+        Load(_nextSceneIndex);
     }
 
     public void OnContinueButtonClick()
     {
-        SceneManager.LoadScene(_currentSceneIndex);
+        Load(_currentSceneIndex);
+    }
+
+    private void OnLoaded(int levelNumber, int sceneIndex)
+    {
+        if (SceneManager.GetActiveScene().buildIndex != sceneIndex)
+        {
+            Load(sceneIndex);
+            _currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        }
     }
 
     private int GetRandomLevel()
     {
         List<int> scenes = new List<int> { SceneIndexHolder.FirstLevel, SceneIndexHolder.SecondLevel, SceneIndexHolder.ThirdLevel };
-        int sceneIndex = scenes[Random.Range(0, scenes.Count - 1)];
+        int sceneIndex = SceneManager.GetActiveScene().buildIndex;
+        sceneIndex++;
+
+        if (sceneIndex > scenes.Count - 1)
+            sceneIndex = 0;
+
         return sceneIndex;
+    }
+
+    private void Load(int sceneIndex)
+    {
+        SceneManager.LoadScene(sceneIndex);
     }
 }

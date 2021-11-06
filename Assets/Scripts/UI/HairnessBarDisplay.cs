@@ -22,7 +22,6 @@ public class HairnessBarDisplay : MonoBehaviour
     private void Start()
     {
         ChangeVizualization();
-        _animatedText.gameObject.SetActive(false);
         _slider.maxValue = _bodyHairCounter.MaxHairQuantity;
         _slider.value = _bodyHairCounter.HairCount;
     }

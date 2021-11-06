@@ -1,40 +1,57 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
+﻿using UnityEngine;
+using UnityEngine.Events;
 
-public static class SaveSystem
+public class SaveSystem : MonoBehaviour
 {
-    public static void SaveLevel(LevelCounter levelCounter)
+    [SerializeField] private LevelCounter _levelCounter;
+    [SerializeField] private SceneLoader _sceneLoader;
+
+    private int _levelCount;
+    private int _sceneIndex;
+    private const string LevelCountKey = "levelCount";
+    private const string SceneIndexKey = "sceneIndex";
+
+    public event UnityAction<int, int> Loaded;
+
+    public void Save()
     {
-        BinaryFormatter formater = new BinaryFormatter();
-        FileStream stream = new FileStream(GetSavePath(), FileMode.Create);
-        LevelData levelData = new LevelData(levelCounter);
-        formater.Serialize(stream, levelData);
-        stream.Close();
+        PlayerPrefs.SetInt(LevelCountKey, _levelCount);
+        PlayerPrefs.SetInt(SceneIndexKey, _sceneIndex);
+        PlayerPrefs.Save();
     }
 
-    public static LevelData LoadLevel()
+    public void Load()
     {
-        if (File.Exists(GetSavePath()))
+        if (PlayerPrefs.HasKey(LevelCountKey) && PlayerPrefs.HasKey(SceneIndexKey))
         {
-            BinaryFormatter formater = new BinaryFormatter();
-            FileStream stream = new FileStream(GetSavePath(), FileMode.Open);
-            LevelData levelData = formater.Deserialize(stream) as LevelData;
-            stream.Close();
-
-            return levelData;
-        }
-        else
-        {
-            return null;
+            _levelCount = PlayerPrefs.GetInt(LevelCountKey);
+            _sceneIndex = PlayerPrefs.GetInt(SceneIndexKey);
+            Loaded?.Invoke(_levelCount, _sceneIndex);
         }
     }
 
-    private static string GetSavePath()
+    private void OnEnable()
     {
-        return $"{Application.persistentDataPath}/LevelSave.lvls";
+        _levelCounter.LevelNumberChanged += OnLevelNumberrChanged;
+        _sceneLoader.SceneChanged += OnSceneChanged;
+    }
+
+    private void OnDisable()
+    {
+        _levelCounter.LevelNumberChanged -= OnLevelNumberrChanged;
+        _sceneLoader.SceneChanged -= OnSceneChanged;
+    }
+
+    private void OnLevelNumberrChanged(int levelCount)
+    {
+        _levelCount = levelCount;
+        Save();
+    }
+
+    private void OnSceneChanged(int nextSceneIndex)
+    {
+        _sceneIndex = nextSceneIndex;
+        Save();
     }
 
 }
