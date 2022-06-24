@@ -89,7 +89,7 @@ public class PlayerMover : MonoBehaviour
 
     private void Move()
     {
-        if (!_isMoving && Input.GetKey(KeyCode.Mouse0) && _isMovementAllowed)
+        if (!_isMoving && Input.GetMouseButton(0) && _isMovementAllowed)
         {
             _isMoving = true;
             Moving?.Invoke();
